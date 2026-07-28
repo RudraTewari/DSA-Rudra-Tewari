@@ -1,3 +1,25 @@
+/**
+ * Finds the minimum and maximum elements in an array using recursion.
+ *
+ * Approach:
+ * 1. Base Case:
+ *    - When the recursion reaches index 0, initialize an array containing:
+ *        • Minimum = arr[0]
+ *        • Maximum = arr[1]
+ *    - Return this array as the initial result.
+ *
+ * 2. Recursive Case:
+ *    - Recursively find the minimum and maximum for elements from
+ *      index 0 to (index - 1).
+ *    - Compare the current element with the stored minimum:
+ *        • If smaller, update the minimum.
+ *    - Compare the current element with the stored maximum:
+ *        • If larger, update the maximum.
+ *    - Return the updated result array.
+ *
+ * Time Complexity: O(n)
+ * Space Complexity: O(n) due to the recursive call stack.
+ */
 public class FindMinMax{
     public static int[] findMinMax(int[] arr,int index){
         if(index==0){
