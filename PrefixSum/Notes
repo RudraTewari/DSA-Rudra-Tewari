@@ -1,0 +1,397 @@
+/*
+    ==================== PREFIX SUM – MASTER REVISION NOTES ====================
+
+    Core Idea:
+    -----------
+    Prefix Sum helps us convert repeated range computations into O(1).
+
+    prefix[i] = sum of elements from index 0 → i
+
+    So,
+    sum(l → r) = prefix[r] - prefix[l - 1]
+
+    ==========================================================================
+
+    ---------------------- 1. BASIC RANGE SUM QUERY ---------------------------
+    Pattern:
+    - Given array, answer multiple sum queries efficiently
+
+    Use Case:
+    - "Find sum between L and R many times"
+
+    Template:
+    ---------
+    int[] prefix = new int[n];
+    prefix[0] = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        prefix[i] = prefix[i - 1] + arr[i];
+    }
+
+    // Query
+    int sum = prefix[r] - (l > 0 ? prefix[l - 1] : 0);
+
+    Time: O(n + q)
+
+    ==========================================================================
+
+    ---------------------- 2. COUNT OF SUBARRAYS WITH SUM = K -----------------
+    Pattern:
+    - Use prefix + hashmap
+
+    Key Idea:
+    - prefix[j] - prefix[i] = k
+    ⇒ prefix[i] = prefix[j] - k
+
+    Template:
+    ---------
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1);
+
+    int sum = 0, count = 0;
+
+    for (int num : nums) {
+        sum += num;
+
+        if (map.containsKey(sum - k)) {
+            count += map.get(sum - k);
+        }
+
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+    }
+
+    ==========================================================================
+
+    ---------------------- 3. LONGEST SUBARRAY WITH SUM = K -------------------
+    Pattern:
+    - Store first occurrence of prefix sum
+
+    Template:
+    ---------
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    int sum = 0, maxLen = 0;
+
+    for (int i = 0; i < n; i++) {
+        sum += nums[i];
+
+        if (map.containsKey(sum - k)) {
+            maxLen = Math.max(maxLen, i - map.get(sum - k));
+        }
+
+        map.putIfAbsent(sum, i);
+    }
+
+    ==========================================================================
+
+    ---------------------- 4. COUNT SUBARRAYS WITH SUM ≤ K --------------------
+    Pattern:
+    - Prefix sum + sliding window (if all positive)
+
+    Template:
+    ---------
+    int left = 0, sum = 0, count = 0;
+
+    for (int right = 0; right < n; right++) {
+        sum += nums[right];
+
+        while (sum > k) {
+            sum -= nums[left++];
+        }
+
+        count += (right - left + 1);
+    }
+
+    ==========================================================================
+
+    ---------------------- 5. PREFIX SUM + MOD (DIVISIBLE BY K) ---------------
+    Pattern:
+    - (prefix % k) matching
+
+    Template:
+    ---------
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1);
+
+    int sum = 0, count = 0;
+
+    for (int num : nums) {
+        sum += num;
+        int mod = ((sum % k) + k) % k;
+
+        count += map.getOrDefault(mod, 0);
+        map.put(mod, map.getOrDefault(mod, 0) + 1);
+    }
+
+    ==========================================================================
+
+    ---------------------- 6. RANGE UPDATE (DIFFERENCE ARRAY) -----------------
+    Pattern:
+    - Multiple range updates efficiently
+
+    Idea:
+    - Instead of updating entire range, mark boundaries
+
+    Template:
+    ---------
+    int[] diff = new int[n];
+
+    // Update [l, r] by val
+    diff[l] += val;
+    if (r + 1 < n) diff[r + 1] -= val;
+
+    // Build final array
+    arr[0] = diff[0];
+    for (int i = 1; i < n; i++) {
+        arr[i] = arr[i - 1] + diff[i];
+    }
+
+    ==========================================================================
+
+    ---------------------- 7. 2D PREFIX SUM (MATRIX) --------------------------
+    Pattern:
+    - Submatrix sum queries
+
+    Formula:
+    ---------
+    prefix[i][j] = matrix[i][j]
+                + prefix[i-1][j]
+                + prefix[i][j-1]
+                - prefix[i-1][j-1]
+
+    Query:
+    ---------
+    sum = prefix[r2][c2]
+        - prefix[r1-1][c2]
+        - prefix[r2][c1-1]
+        + prefix[r1-1][c1-1]
+
+    ==========================================================================
+
+    ---------------------- 8. PREFIX MIN / MAX -------------------------------
+    Pattern:
+    - Track best till index
+
+    Template:
+    ---------
+    prefixMin[0] = arr[0];
+    for (int i = 1; i < n; i++) {
+        prefixMin[i] = Math.min(prefixMin[i - 1], arr[i]);
+    }
+
+    ==========================================================================
+
+    ---------------------- 9. SPLIT ARRAY / PARTITION -------------------------
+    Pattern:
+    - Split into left + right using prefix
+
+    Template:
+    ---------
+    int total = prefix[n - 1];
+
+    for (int i = 0; i < n - 1; i++) {
+        int left = prefix[i];
+        int right = total - prefix[i];
+
+        if (condition) count++;
+    }
+
+    ==========================================================================
+
+    ---------------------- 10. PREFIX SUM ON STRINGS --------------------------
+    Pattern:
+    - Count frequency till index
+
+    Example:
+    ---------
+    int[][] freq = new int[n][26];
+
+    freq[0][s.charAt(0) - 'a']++;
+
+    for (int i = 1; i < n; i++) {
+        freq[i] = freq[i - 1].clone();
+        freq[i][s.charAt(i) - 'a']++;
+    }
+
+    ==========================================================================
+
+    ---------------------- 11. PREFIX + LAST OCCURRENCE -----------------------
+    Pattern:
+    - Like Garbage Collection problem
+
+    Idea:
+    - Find last index of each type
+    - Add prefix cost till that index
+
+    ==========================================================================
+
+    ---------------------- COMMON MISTAKES -----------------------------------
+    1. Forgetting (l > 0 ? prefix[l-1] : 0)
+    2. Negative modulo issues
+    3. Using int instead of long (overflow)
+    4. Off-by-one errors in indexing
+    5. Misunderstanding prefix[i] meaning
+
+    ==========================================================================
+
+    ---------------------- GOLDEN RULE ---------------------------------------
+    Whenever you see:
+    - "range sum"
+    - "subarray sum"
+    - "multiple queries"
+    - "cumulative computation"
+
+    👉 Think PREFIX SUM first.
+
+    ==========================================================================
+
+    */
+
+    /*
+    ================== PREFIX SUM ON 0s and 1s (VERY IMPORTANT) ==================
+
+    These problems look different but follow ONE CORE TRICK:
+
+    👉 Convert 0 → -1
+    👉 Keep 1 → +1
+
+    Why?
+    - Because equal 0s and 1s means:
+        count(1) == count(0)
+    ⇒ sum = 0
+
+    ==========================================================================
+
+    ------------------ 1. LONGEST SUBARRAY WITH EQUAL 0s & 1s ------------------
+    Pattern:
+    - Replace 0 with -1
+    - Find longest subarray with sum = 0
+
+    Template:
+    ---------
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);
+
+    int sum = 0, maxLen = 0;
+
+    for (int i = 0; i < nums.length; i++) {
+        sum += (nums[i] == 0 ? -1 : 1);
+
+        if (map.containsKey(sum)) {
+            maxLen = Math.max(maxLen, i - map.get(sum));
+        } else {
+            map.put(sum, i);
+        }
+    }
+
+    ==========================================================================
+
+    ------------------ 2. COUNT SUBARRAYS WITH EQUAL 0s & 1s -------------------
+    Pattern:
+    - Same conversion (0 → -1)
+    - Count subarrays with sum = 0
+
+    Template:
+    ---------
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1);
+
+    int sum = 0, count = 0;
+
+    for (int num : nums) {
+        sum += (num == 0 ? -1 : 1);
+
+        count += map.getOrDefault(sum, 0);
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+    }
+
+    ==========================================================================
+
+    ------------------ 3. LONGEST SUBARRAY WITH MORE 1s THAN 0s ----------------
+    Pattern:
+    - Convert 0 → -1
+    - Find longest subarray with sum > 0
+
+    Trick:
+    - Use prefix + monotonic stack OR brute with prefix
+
+    (Slightly advanced, less common in interviews)
+
+    ==========================================================================
+
+    ------------------ 4. COUNT SUBARRAYS WITH MORE 1s THAN 0s -----------------
+    Pattern:
+    - Convert 0 → -1
+    - Count subarrays with sum > 0
+
+    Approach:
+    - Prefix sum + Fenwick Tree / TreeMap
+    - Advanced (seen in hard problems)
+
+    ==========================================================================
+
+    ------------------ 5. FIXED SIZE WINDOW (SLIDING WINDOW) ------------------
+    Pattern:
+    - If window size is fixed → no prefix needed
+
+    Example:
+    ---------
+    int count = 0, ones = 0;
+
+    for (int i = 0; i < k; i++) {
+        ones += nums[i];
+    }
+
+    count = ones;
+
+    for (int i = k; i < n; i++) {
+        ones += nums[i] - nums[i - k];
+        count = Math.max(count, ones);
+    }
+
+    ==========================================================================
+
+    ------------------ 6. PREFIX DIFFERENCE (COUNT 1s - COUNT 0s) --------------
+    Pattern:
+    - Directly track difference instead of modifying array
+
+    Template:
+    ---------
+    int sum = 0;
+
+    for (int num : nums) {
+        if (num == 1) sum++;
+        else sum--;
+    }
+
+    ==========================================================================
+
+    ------------------ COMMON INTUITION ---------------------------------------
+    1. Equal 0s and 1s → sum = 0
+    2. More 1s → sum > 0
+    3. More 0s → sum < 0
+
+    👉 Everything reduces to prefix sum comparison
+
+    ==========================================================================
+
+    ------------------ COMMON MISTAKES ----------------------------------------
+    1. Forgetting to convert 0 → -1
+    2. Not initializing map with (0, -1) or (0, 1)
+    3. Using sliding window when negative values exist ❌
+    4. Confusing count vs length problems
+
+    ==========================================================================
+
+    ------------------ INTERVIEW GOLD -----------------------------------------
+    Whenever you see:
+    - "equal 0s and 1s"
+    - "binary array balance"
+    - "same number of 0 and 1"
+
+    👉 Immediately think:
+    ✔ Convert 0 → -1
+    ✔ Use prefix sum + hashmap
+
+*/
