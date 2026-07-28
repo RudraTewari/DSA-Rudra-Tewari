@@ -1,13 +1,13 @@
 # Compiled Java files
 *.class
 
-# VS Code settings
-.vscode/
-
 # Build directories
 out/
 bin/
 target/
+
+# VS Code
+.vscode/
 
 # OS files
 .DS_Store
