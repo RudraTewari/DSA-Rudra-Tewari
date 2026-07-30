@@ -47,7 +47,7 @@ Loop until lb > ub → target not found
             if(nums[mid] == target)
                 return mid;
             
-            if(nums[lb]<=nums[mid])
+            if(nums[lb]<=nums[mid]) //Left Half Sorted 
             {
                 if(nums[lb]<= target && target < nums[mid])
                 {
@@ -57,7 +57,7 @@ Loop until lb > ub → target not found
                     lb=mid+1;
                 }
             }
-            else{
+            else{ //Right Half Sorted
                 if(nums[mid] < target && target <= nums[ub])
                 {
                     lb=mid+1;
