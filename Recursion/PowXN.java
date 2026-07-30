@@ -8,20 +8,28 @@
             Example:
             x^-3 = (1/x)^3
 
-    2. Base Case:
-        - If n == 0, return 1
-        - Because any number raised to power 0 is 1
+    Binary Exponentiation (findPower):
 
-    3. Divide the problem:
-        - Instead of calculating x^n directly,
-            calculate x^(n/2) recursively
-        - Store the result in "half"
+    1. Base Case:
+        if (exp == 0)
+            return 1;
 
-    4. Use exponent rules:
+    2. Divide the problem into half:
+        long half = findPower(n, exp / 2);
 
-        If n is EVEN:
-        ----------------
-       x^n = x^(n/2) * x^(n/2)
+    3. Square the half answer:
+        long res = (half * half) % M;
+
+    4. If the exponent is odd, multiply one extra 'n':
+        if (exp % 2 == 1)
+            res = (res * n) % M;
+
+    5. Return the final answer:
+        return res;
+
+    If n is EVEN:
+--------------------------------------
+        x^n = x^(n/2) * x^(n/2)
            = half * half
 
         Example:
@@ -30,8 +38,8 @@
             = 1024
 
 
-        If n is ODD:
-        ----------------
+    If n is ODD:
+--------------------------------------
         x^n = x * x^(n/2) * x^(n/2)
             = x * half * half
 
@@ -76,7 +84,9 @@
     - If exponent is odd, multiply one extra x
 
 
-    8. Time Complexity:
+    8. Time Complexity:Thus, instead of multiplying n 'exp' times, we repeatedly divide the exponent
+    by 2, making the algorithm run in O(log exp) time.
+    
     - Every step reduces n by half
     - Number of calls = log(n)
     - Time Complexity: O(log n)
@@ -90,12 +100,13 @@ class PowXN{
         }
         double half = findPower(x,n/2);
 
-        if(n%2==0){
-            half = half * half;
-        }else{
-            half = x * half * half;
+        double result = 1;
+        result = half * half;
+        if(n%2==1){
+            result = result * x;
         }
-        return half;
+        
+        return result;
     }
     public static double powXN(double x,int n){
         if(n<0){
