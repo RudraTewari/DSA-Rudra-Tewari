@@ -56,30 +56,34 @@
 */
 // import java.util.Set;
 // import java.util.HashSet;
-// class LongestSubStringWithoutRepeatCh{
-//     public int lengthOfLongestSubstring(String s)
-//     {
-//         int maxLen = Integer.MIN_VALUE;
-//         int windowStart=0, windowEnd = 0;
-//         Set <Character> set = new HashSet<>();
-//         while(windowEnd < s.length())
-//         {
-//             char ch = s.charAt(windowEnd);
-//             if(set.contains(ch))
-//             {
-//                 while(windowStart < windowEnd && set.contains(ch))
-//                 {
-//                     set.remove(s.charAt(windowStart));
-//                     windowStart++;
-//                 }
-//             }
-//             set.add(ch);
-//             maxLen=Math.max(maxLen,windowEnd-windowStart+1);
-//             // System.out.println(maxLen);
-//             windowEnd++;
-//         }
-//         return maxLen == Integer.MIN_VALUE ? 0 : maxLen;
-//     }
+
+import java.util.HashSet;
+import java.util.Set;
+
+class LongestSubStringWithoutRepeatCh{
+    public int lengthOfLongestSubstring(String s)
+    {
+        int maxLen = Integer.MIN_VALUE;
+        int windowStart=0, windowEnd = 0;
+        Set <Character> set = new HashSet<>();
+        while(windowEnd < s.length())
+        {
+            char ch = s.charAt(windowEnd);
+            if(set.contains(ch))
+            {
+                while(windowStart < windowEnd && set.contains(ch))
+                {
+                    set.remove(s.charAt(windowStart));
+                    windowStart++;
+                }
+            }
+            set.add(ch);
+            maxLen=Math.max(maxLen,windowEnd-windowStart+1);
+            System.out.println(maxLen);
+            windowEnd++;
+        }
+        return maxLen == Integer.MIN_VALUE ? 0 : maxLen;
+    }
     public static void main(String[] args){
         String str = "abcabcbb";
         LongestSubStringWithoutRepeatCh obj = new LongestSubStringWithoutRepeatCh();

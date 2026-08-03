@@ -1,7 +1,7 @@
 
 class SmallestDivisorEqThreshold{
     public static boolean canDo(int divisor, int[] nums,int threshold){
-        int sum=0,result=0;
+        int sum=0;
         for(int num : nums){
             sum += (num + divisor -1)/divisor;
             System.out.println("Result:"+sum);

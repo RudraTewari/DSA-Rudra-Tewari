@@ -70,7 +70,7 @@ Space: O(1)
     public int findPeakElement(int[] nums)
     {
         int left=0,right=nums.length-1;
-        int ans=0;
+        
         while(left<right)
         {
             int mid=left+(right-left)/2;
