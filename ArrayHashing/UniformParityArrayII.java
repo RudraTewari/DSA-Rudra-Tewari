@@ -5,7 +5,7 @@ By tracking the previous parity*/
 class UniformParityArrayII{
     public boolean check(int[] nums,int target)
     {
-        if(nums[0] & 1 != target) return false;
+        if((nums[0] & 1) != target) return false;
         for(int i=1;i<nums.length;i++)
         {
             int curr = nums[i] & 1;
