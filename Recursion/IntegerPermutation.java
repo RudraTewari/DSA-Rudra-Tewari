@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class IntegerPermutation {
+
+    
     static void findPermutations(ArrayList<Integer> processed,int[] unProcessed){
         if(unProcessed.length==0){
             System.out.println(processed);
@@ -20,5 +22,7 @@ public class IntegerPermutation {
         int[] arr = {1,2,3};
 
         findPermutations(new ArrayList<>(),arr);
+        // int ans = findPermutationsSequence(new ArrayList<>(),arr,3);
+        // System.out.println(ans);
     }
 }
