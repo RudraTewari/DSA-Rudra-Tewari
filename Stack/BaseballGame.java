@@ -5,7 +5,6 @@ class BaseballGame{
     public int calPoints(String[] operations)
     {
         Deque <Integer> ans = new ArrayDeque<>();
-        int n=operations.length;
         for(String val : operations)
         {
             if(val == "+")

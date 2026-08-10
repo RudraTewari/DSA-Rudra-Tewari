@@ -105,7 +105,7 @@ ALGORITHM:
         temp1.next = temp2
 
     c) Connect current node of second list
-        to next node of first list:
+        to next node of first list:ww
         
         temp2.next = m1
 
