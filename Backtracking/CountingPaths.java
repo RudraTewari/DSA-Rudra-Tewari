@@ -2,15 +2,61 @@ package Backtracking;
 
 public class CountingPaths{
     public static int findPaths(int[][] mat,int row,int col,int targetRow,int targetCol){
-        if(row == targetRow-1){
+        if(row == targetRow-1&&col==targetCol-1){
             return 1;
         }
-        if(col==targetCol-1){
-            return 1;
+        int downCount = 0;
+        int rightCount = 0;
+
+        if (row < targetRow - 1) {
+            downCount = findPaths(mat, row + 1, col, targetRow, targetCol);
         }
-        int downCount=findPaths(mat,row+1,col,targetRow,targetCol);
-        int rightCount=findPaths(mat,row,col+1,targetRow,targetCol);
-        return rightCount+downCount;
+
+        if (col < targetCol - 1) {
+            rightCount = findPaths(mat, row, col + 1, targetRow, targetCol);
+        }
+
+        return downCount + rightCount;
+    }
+    public static int findPathsWithDiagonal(int[][] mat,int row,int col,int targetRow,int targetCol){
+        if(row==targetRow-1 && col == targetCol-1)
+            return 1;
+        
+        int downCount=0,diagonalCount=0,rightCount=0;
+        if(row < targetRow-1 && col < targetCol-1)
+            diagonalCount = findPathsWithDiagonal(mat,row+1,col+1,targetRow,targetCol);
+        if(row <targetRow-1)
+            downCount=findPathsWithDiagonal(mat,row+1,col,targetRow,targetCol);
+        if(col<targetCol-1)
+            rightCount=findPathsWithDiagonal(mat,row,col+1,targetRow,targetCol);
+
+        return rightCount+downCount+diagonalCount;
+    }
+
+    public static void findPathsWithDiagonalII(int[][] mat,int row,int col,int targetRow,
+                                                            int targetCol, StringBuilder ans){
+        if(row==targetRow-1 && col == targetCol-1){
+            System.out.println(ans);
+            return;
+        }
+        if(row < targetRow-1 && col < targetCol-1){
+            ans.append("Di");
+            findPathsWithDiagonalII(mat,row+1,col+1,targetRow,targetCol,ans);
+            ans.delete(ans.length()-2, ans.length());
+        }
+
+        if(row <targetRow-1){
+            ans.append("D");
+            findPathsWithDiagonalII(mat,row+1,col,targetRow,targetCol,ans);
+            ans.deleteCharAt(ans.length()-1);
+        }
+        
+        if(col<targetCol-1){
+            ans.append("R");
+            findPathsWithDiagonalII(mat,row,col+1,targetRow,targetCol,ans);
+            ans.deleteCharAt(ans.length()-1);
+        }
+            
     }
 
     public static void findPathsII(int[][] mat,int row,int col,int targetRow,
@@ -38,6 +84,10 @@ public class CountingPaths{
         int pathCount = findPaths(mat,0,0,targetRow,targetCol);
         StringBuilder path = new StringBuilder("");
         findPathsII(mat,0,0,targetRow,targetCol,path);
+        int pathCountwithDiagonal = findPathsWithDiagonal(mat, 0, 0, targetRow, targetCol);
         System.out.println("Answer : "+pathCount);
+        System.out.println("Answer with Diagonal : "+pathCountwithDiagonal);
+        StringBuilder pathI=new StringBuilder("");
+        findPathsWithDiagonalII(mat, 0, 0, targetRow, targetCol, pathI);
     }
 }
