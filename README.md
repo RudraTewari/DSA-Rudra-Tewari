@@ -55,7 +55,7 @@ DSA/
 ## 🔄 Recursion & Backtracking
 
 - [x] Recursion
-- [ ] Backtracking
+- [x] Backtracking
 
 ## 📦 Queue
 
