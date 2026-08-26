@@ -70,7 +70,7 @@ Space Complexity:
 */
 public class CookieDistribution {
 
-    static int result=Integer.MAX_VALUE;
+    static int result;
     
     static void findDistribution(int idx, int[] children, int[] cookies, int k){
         if(idx==cookies.length){
@@ -93,7 +93,7 @@ public class CookieDistribution {
         int k=2;
         
         int[] children = new int[k];
-        
+        result=Integer.MAX_VALUE;
         findDistribution(0, children, cookies, k);
         System.out.println(result);
     }
