@@ -10,9 +10,9 @@ Approach: Backtracking / Try All Possible Cookie Distributions
 2. For every cookie, try giving it to each of the `k` children:
 
         for (int i = 0; i < k; i++) {
-           children[i] += cookie;              // Choose
-           findDistribution(idx + 1, children, cookies, k); // Explore
-           children[i] -= cookie;              // Backtrack
+            children[i] += cookie;              // Choose
+            findDistribution(idx + 1, children, cookies, k); // Explore
+            children[i] -= cookie;              // Backtrack
         }
 
     This generates all possible ways to distribute the cookies.
