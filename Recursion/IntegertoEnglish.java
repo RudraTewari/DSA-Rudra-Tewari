@@ -68,7 +68,7 @@ public class IntegertoEnglish {
     }
 
     public static void main(String[] args) {
-        int num = 11112345;
+        int num = 10000;
 
         String result = numberToWords(num);
 
