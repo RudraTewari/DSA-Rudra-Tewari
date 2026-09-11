@@ -27,7 +27,8 @@ Intuition:
 class Solution {
 
     static List<String> ans;  // Stores all valid happy strings
-
+    static int count;
+    static String result;
     public static void Solve(int n, int k, StringBuilder p) {
 
         if (p.length() == n) {
@@ -48,17 +49,42 @@ class Solution {
         }
     }
 
+    public static void SolveOptimised(int n, int k, StringBuilder p) {
+        // A complete happy string has been formed
+        if (p.length() == n) {
+            count++;    // Count this happy string
+            // If this is the kth string, store it
+            if (count == k) {
+                result = p.toString();
+            }
+            return;
+        }
+        // Try characters in lexicographical order
+        for (char ch = 'a'; ch <= 'c'; ch++) {
+            // Same adjacent characters are not allowed
+            if (!p.isEmpty() && p.charAt(p.length() - 1) == ch)
+                continue;
+    
+            p.append(ch);               // Choose
+            SolveOptimised(n, k, p);    // Explore
+            p.deleteCharAt(p.length() - 1); // Backtrack
+        }
+    }
+
     public String getHappyString(int n, int k) {
 
         ans = new ArrayList<>();    // Initialize list to store valid strings
-
         StringBuilder sb = new StringBuilder();  // Stores the current string
-
         Solve(n, k, sb);  // Generate all happy strings
-
         if (ans.size() < k) return ""; // Fewer than k happy strings exist
-
         return ans.get(k - 1);       // Return kth string (list uses 0-based index)
+    }
+    public String getHappyStringII(int n, int k){
+        count=0;
+        result="";
+        StringBuilder sbII = new StringBuilder();
+        SolveOptimised(n, k, sbII);
+        return result;
     }
 }
 public class KthLexicographicHappy {
@@ -71,6 +97,8 @@ public class KthLexicographicHappy {
 
         Solution obj = new Solution();
         String ans = obj.getHappyString(n,k);
+        String ansII = obj.getHappyStringII(n, k);
         System.out.println(ans);
+        System.out.println(ansII);
     }
 }
